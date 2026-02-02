@@ -5,15 +5,21 @@
   become: yes
 
   tasks:
-    - name: Load port configuration from the local cloned repo
+    - name: Ensure UFW is installed
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+        update_cache: yes
+
+    - name: Load port configuration
       ansible.builtin.include_vars:
-        file: playbook-ufw-minimal-rules.yml
+        file: firewall_rules.yml
 
     - name: SAFETY CHECK - Ensure Port 22 is in the rules
       ansible.builtin.assert:
         that:
           - "'22' in (allowed_ports | map(attribute='port') | map('string') | list)"
-        fail_msg: "Security Halt: Port 22 missing in GitHub config!"
+        fail_msg: "Security Halt: Port 22 missing in config!"
 
     - name: Reset UFW and apply policies
       community.general.ufw:
