@@ -1,0 +1,12 @@
+---
+- name: Master System Configuration
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+    - name: Run Package Installation
+      ansible.builtin.import_playbook: playbook-apt.yml
+
+    - name: Run Firewall Configuration
+      ansible.builtin.import_playbook: playbook-ufw.yml
