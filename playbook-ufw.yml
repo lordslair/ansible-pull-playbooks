@@ -13,7 +13,7 @@
 
     - name: Load port configuration
       ansible.builtin.include_vars:
-        file: firewall_rules.yml
+        file: playbook-ufw-minimal-rules.yml
 
     - name: SAFETY CHECK - Ensure Port 22 is in the rules
       ansible.builtin.assert:
