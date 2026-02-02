@@ -1,0 +1,33 @@
+---
+- name: Firewall Self-Configuration (Ansible-Pull)
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+    - name: Load port configuration from the local cloned repo
+      ansible.builtin.include_vars:
+        file: playbook-ufw-minimal-rules.yml
+
+    - name: SAFETY CHECK - Ensure Port 22 is in the rules
+      ansible.builtin.assert:
+        that:
+          - "'22' in (allowed_ports | map(attribute='port') | map('string') | list)"
+        fail_msg: "Security Halt: Port 22 missing in GitHub config!"
+
+    - name: Reset UFW and apply policies
+      community.general.ufw:
+        state: reset
+
+    - name: Allow Ports from YAML
+      community.general.ufw:
+        rule: allow
+        port: "{{ item.port | string }}"
+        proto: "{{ item.proto | default('tcp') }}"
+      loop: "{{ allowed_ports }}"
+
+    - name: Enable Firewall
+      community.general.ufw:
+        state: enabled
+        direction: incoming
+        policy: deny
