@@ -7,7 +7,7 @@
   tasks:
     - name: Load base package list
       ansible.builtin.include_vars:
-        file: playbook-apt.yml
+        file: playbook-apt-packages.yml
 
     - name: Ensure base packages are installed
       ansible.builtin.apt:
