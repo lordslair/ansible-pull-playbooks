@@ -1,0 +1,16 @@
+---
+- name: Install Base Essentials (Ansible-Pull)
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+    - name: Load base package list
+      ansible.builtin.include_vars:
+        file: playbook-apt.yml
+
+    - name: Ensure base packages are installed
+      ansible.builtin.apt:
+        name: "{{ base_packages }}"
+        state: present
+        update_cache: yes

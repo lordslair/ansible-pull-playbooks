@@ -1,0 +1,12 @@
+base_packages:
+  - fdisk
+  - git
+  - vim
+  - htop
+  - net-tools
+  - sudo
+  - rsync
+  - tree
+  - lsd
+  - duf
+  - btop
